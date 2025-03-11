@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 등록</title>
+</head>
+<body>
+    <h1>상품 등록</h1>
+    <form th:action="@{/api/resell/products/register}" method="post" id="productForm">
+        <!-- 기본 상품 정보 -->
+        <label for="name">상품명:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="modelId">모델 ID:</label>
+        <input type="text" id="modelId" name="modelId" required><br><br>
+
+        <label for="price">가격:</label>
+        <input type="number" id="price" name="price" required><br><br>
+
+        <!-- 이미지 URL -->
+        <label for="imageUrl">대표 이미지 URL:</label>
+        <input type="text" id="imageUrl" name="imageUrl" required><br><br>
+
+        <label for="imageDetailUrl1">상세 이미지 URL 1:</label>
+        <input type="text" id="imageDetailUrl1" name="imageDetailUrl1"><br><br>
+
+        <label for="imageDetailUrl2">상세 이미지 URL 2:</label>
+        <input type="text" id="imageDetailUrl2" name="imageDetailUrl2"><br><br>
+
+        <label for="imageDetailUrl3">상세 이미지 URL 3:</label>
+        <input type="text" id="imageDetailUrl3" name="imageDetailUrl3"><br><br>
+
+        <label for="color">색상:</label>
+        <input type="text" id="color" name="color"><br><br>
+
+        <!-- 브랜드 선택 -->
+        <label>브랜드:</label><br>
+        <input type="radio" id="nike" name="brand" value="Nike" required>
+        <label for="nike">Nike</label><br>
+        <input type="radio" id="adidas" name="brand" value="Adidas">
+        <label for="adidas">Adidas</label><br>
+        <input type="radio" id="asics" name="brand" value="Asics">
+        <label for="asics">Asics</label><br>
+        <input type="radio" id="new_balance" name="brand" value="New_Balance">
+        <label for="new_balance">New Balance</label><br>
+        <input type="radio" id="reebok" name="brand" value="Reebok">
+        <label for="reebok">Reebok</label><br>
+        <input type="radio" id="others" name="brand" value="Others">
+        <label for="others">Others</label><br><br>
+
+        <!-- 성별 선택 -->
+        <label>성별:</label><br>
+        <input type="radio" id="male" name="gender" value="male" required>
+        <label for="male">남성</label><br>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">여성</label><br><br>
+
+        <!-- 사이즈 옵션 -->
+        <div id="sizeOptions">
+            <h3>사이즈 옵션</h3>
+            <div th:each="size : ${T(com.trendy.product.ProductOption.Size).values()}">
+                <input type="radio" th:id="${'size_' + size.value}" name="size" th:value="${size.value}" required>
+                <label th:for="${'size_' + size.value}" th:text="${size.value}"></label>
+                <br>
+            </div>
+        </div>
+        <br>
+
+        <!-- Submit Button -->
+        <button type="submit">상품 등록</button>
+    </form>
+
+    <script>
+        document.getElementById("productForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const productData = {
+                name: formData.get("name"),
+                modelId: formData.get("modelId"),
+                price: parseInt(formData.get("price")),
+                imageUrl: formData.get("imageUrl"),
+                imageDetailUrl1: formData.get("imageDetailUrl1"),
+                imageDetailUrl2: formData.get("imageDetailUrl2"),
+                imageDetailUrl3: formData.get("imageDetailUrl3"),
+                color: formData.get("color"),
+                brand: formData.get("brand"),
+                gender: formData.get("gender"),
+                productOptions: [{
+                    size: formData.get("size"),
+                    isAvailable: true,
+                    stockQuantity: 1
+                }]
+            };
+
+            try {
+                const response = await fetch("/api/resell/products/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert("상품 등록 성공!");
+                    window.location.href = "/product-list";
+                } else {
+                    const error = await response.json();
+                    alert("상품 등록 실패: " + JSON.stringify(error));
+                }
+            } catch (error) {
+                console.error("네트워크 에러:", error);
+                alert("네트워크 에러가 발생했습니다.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시판</title>
+</head>
+<body>
+    <h1>게시판</h1>
+	<form action="/admin/board/search" method="get">
+		    <label for="criteria">검색 기준:</label>
+		    <select name="criteria" id="criteria">
+		        <option value="noticeEventId">게시글 번호</option>
+		    </select>
+		    <label for="value">검색 값:</label>
+		    <input type="number" name="value" id="value">
+		    <label for="sortOption">정렬 옵션:</label>
+		    <select name="sortOption" id="sortOption">
+		        <option value="latest">최신순</option>
+		        <option value="oldest">오래된 순</option>
+		    </select>
+		    <button type="submit">검색</button>
+		</form>
+	<form th:action="@{/admin/board/delete-multiple}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+				<th>선택</th>
+				<th>번호</th>
+                <th>유형</th>
+                <th>제목</th>
+                <th>내용</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="board : ${boards}">
+				<td><input type="checkbox" name="noticeEventIds" th:value="${board.noticeEventId}" /></td>
+				<td><a th:href="@{/admin/board/modify(noticeEventId=${board.noticeEventId})}" th:text="${board.noticeEventId}"></a></td>
+                <td th:text="${board.type}">유형</td>
+                <td th:text="${board.title}">제목</td>
+                <td th:text="${board.content}">내용</td>
+            </tr>
+        </tbody>
+    </table>
+	<button type="submit">삭제</button>
+	</form>
+	<button onclick="location.href='/admin/board/register'">등록</button>
+    <button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+</html>

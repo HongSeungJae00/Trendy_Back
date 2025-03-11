@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>포트원 결제 테스트</title>
+    <!-- PortOne JavaScript SDK -->
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+</head>
+<body>
+    <h1>포트원 결제 테스트</h1>
+    <button type="button" onclick="payWithKakao()">카카오페이 결제</button>
+    <button type="button" onclick="payWithToss()">토스페이 결제</button>
+
+    <script>
+        if (!window.IMP) {
+            console.error("포트원 SDK가 로드되지 않았습니다.");
+        } else {
+            const IMP = window.IMP;
+            IMP.init("imp55088383");
+        }
+
+        async function payWithKakao() {
+            IMP.request_pay({
+                pg: "kakaopay.TC0ONETIME",
+                pay_method: "card",
+                merchant_uid: `mid_${Date.now()}`,
+                name: "KakaoPay 테스트 결제",
+                amount: 5000,
+                buyer_email: "test@test.com",
+                buyer_name: "테스터",
+                buyer_tel: "010-0000-0000",
+                buyer_addr: "서울특별시 강남구 삼성동",
+                buyer_postcode: "123-456"
+            }, function (rsp) {
+                // ... 결제 결과 처리
+            });
+        }
+
+        async function payWithToss() {
+            IMP.request_pay({
+                pg: "tosspay",  // 토스페이는 단순히 'tosspay'로 설정
+                pay_method: "card",
+                merchant_uid: `mid_${Date.now()}`,
+                name: "Toss 테스트 결제",
+                amount: 5000,
+                buyer_email: "test@test.com",
+                buyer_name: "테스터",
+                buyer_tel: "010-0000-0000",
+                buyer_addr: "서울특별시 강남구 삼성동",
+                buyer_postcode: "123-456"
+            }, function (rsp) {
+                // ... 결제 결과 처리
+            });
+        }
+    </script>
+    
+    <!-- 기존 콘텐츠 -->
+    <h1>	
+		<form action="/perform_logout" method="post" style="display: inline;">
+	    <button type="submit" class="button" style="background-color: red;">
+	        로그아웃
+	    </button>
+		</form>
+	</h1>
+    
+	
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 등록</title>
+</head>
+<body>
+    <h1>게시물 등록</h1>
+    <form th:action="@{/admin/board/register}" method="post">
+		<div>
+		    <label for="type">유형:</label>
+		    	<select id="type" name="type" required>
+		        	<option value="notice">공지</option>
+		        	<option value="event">이벤트</option>
+			</select>
+		</div>
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required />
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+        <div>
+            <button type="submit">등록</button>
+        </div>
+    </form>
+    <button onclick="location.href='/board'">취소</button>
+</body>
+</html>

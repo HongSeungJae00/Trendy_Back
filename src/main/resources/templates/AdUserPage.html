@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Management</title>
+</head>
+<body>
+    <h1>유저 관리</h1>
+	<form th:action="@{/admin/user/search}" method="get">
+			        <label for="criteria">검색 기준:</label>
+			        <select name="criteria" id="criteria">
+			            <option value="userId">유저 ID</option>
+			        </select>
+
+			        <label for="value">검색 값:</label>
+			        <input type="text" id="value" name="value" placeholder="검색할 유저 ID를 입력하세요" />
+
+			        <label for="sortOption">정렬:</label>
+			        <select name="sortOption" id="sortOption">
+			            <option value="latest"th:selected="${sortOption == 'latest'}">최신순</option>
+			            <option value="oldest"th:selected="${sortOption == 'oldest'}">오래된순</option>
+			        </select>
+
+			        <button type="submit">검색</button>
+			    </form>
+    <form th:action="@{/admin/user/delete-multiple}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="checkAll" onclick="toggleAllChecks(this)" /></th>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>비밀번호</th>
+                    <th>휴대폰번호</th>
+					<th>이메일</th>
+					<th>주소</th>
+					<th>가입일</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+			<tbody>
+			    <tr th:each="user : ${users}">
+			        <td><input type="checkbox" name="userIds" th:value="${user.userId}" /></td>
+			        <td th:text="${user.username}"></td>
+			        <td th:text="${user.userId}"></td>
+			        <td>******</td>
+			        <td th:text="${user.phoneNumber}"></td>
+			        <td th:text="${user.email}"></td>
+			        <td th:text="${user.shippingAddress}"></td>
+			        <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></td>
+			        <td>
+			            <a th:href="@{/admin/user/modify(userId=${user.userId})}">프로필</a>
+			        </td>
+			    </tr>
+			</tbody>
+        </table>
+        <button type="submit">삭제</button>
+    </form>
+	<button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+</html>

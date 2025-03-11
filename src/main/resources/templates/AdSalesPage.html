@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>랭킹 및 매출 관리</title>
+</head>
+<body>
+    <div>
+        <h2>랭킹 및 매출 관리</h2>
+
+        <!-- 검색 및 정렬 폼 -->
+        <div>
+            <form th:action="@{/admin/sales}" method="get">
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="상품명으로 검색">
+                <select name="sort">
+                    <option value="desc" th:selected="${sort == 'desc'}">매출액 높은 순</option>
+                    <option value="asc" th:selected="${sort == 'asc'}">매출액 낮은 순</option>
+                </select>
+                <button type="submit">검색</button>
+            </form>
+        </div>
+
+        <!-- 삭제 폼 -->
+        <form id="deleteForm" th:action="@{/admin/sales/delete}" method="post">
+            <button type="button" onclick="deleteSelected()">선택 삭제</button>
+            
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleAll()"></th>
+                        <th>순위</th>
+                        <th>상품명</th>
+                      
+                        <th>판매 수량</th>
+                        <th>총 매출금액</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="sales, stat : ${salesList}">
+                        <td><input type="checkbox" name="selectedSales" th:value="${sales.saleId}"></td>
+                        <td th:text="${stat.count}"></td>
+                        <td th:text="${sales.modelId}"></td>
+                        
+                        <td th:text="${sales.quantity}"></td>
+                        <td th:text="${#numbers.formatInteger(sales.totalPrice, 0, 'COMMA') + '원'}"></td>
+                   
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <script>
+        function toggleAll() {
+            const mainCheckbox = document.getElementById('selectAll');
+            const checkboxes = document.getElementsByName('selectedSales');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = mainCheckbox.checked;
+            });
+        }
+
+        function deleteSelected() {
+            const checkboxes = document.getElementsByName('selectedSales');
+            const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            
+            if (selectedCount === 0) {
+                alert('삭제할 항목을 선택해주세요.');
+                return;
+            }
+
+            if (confirm('선택한 ' + selectedCount + '개의 항목을 삭제하시겠습니까?')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매 정산 계좌</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        aside {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 15px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+        }
+
+        section {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        h2 {
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group select, 
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .save-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trendy</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul>
+				<li><a href="/myloginInformation">로그인 정보</a></li>
+				<li><a href="/myInformation">내정보</a></li>
+				<li><a href="/addressbook">주소록</a></li>
+				<li><a href="/sellAccount">판매 정산 계좌</a></li>
+				<li><a href="/cashReceipt">현금영수증 정보</a></li>
+            </ul>
+        </aside>
+        <section>
+            <h2>판매 정산 계좌</h2>
+            <form>
+                <div class="form-group">
+                    <label for="bankName">은행명</label>
+                    <select id="bankName">
+                        <option value="">선택하세요</option>
+                        <option value="국민은행">국민은행</option>
+                        <option value="신한은행">신한은행</option>
+                        <option value="우리은행">우리은행</option>
+                        <option value="하나은행">하나은행</option>
+                        <option value="농협은행">농협은행</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="accountNumber">계좌번호</label>
+                    <input type="text" id="accountNumber" placeholder="- 없이 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label for="accountHolder">예금주</label>
+                    <input type="text" id="accountHolder" placeholder="예금주명을 정확히 입력하세요">
+                </div>
+                <button type="button" class="save-btn" onclick="saveAccountDetails">저장하기</button>
+            </form>
+        </section>
+    </main>
+	<script>
+	       function saveAccountDetails() {
+	           const bankName = document.getElementById("bankName").value;
+	           const accountNumber = document.getElementById("accountNumber").value;
+	           const accountHolder = document.getElementById("accountHolder").value;
+
+	           // 입력 검증
+	           if (!bankName || !accountNumber || !accountHolder) {
+	               alert("모든 필드를 입력해주세요.");
+	               return;
+	           }
+
+	           const payload = {
+	               bank_name: bankName,
+	               account_number: accountNumber,
+	               account_holder: accountHolder
+	           };
+			   console.log("Payload:", payload); // 디버깅용 로그
+			   
+	           // API 요청
+	           fetch("/api/user/update-account", {
+	               method: "POST",
+	               headers: {
+	                   "Content-Type": "application/json"
+	               },
+	               body: JSON.stringify(payload)
+	           })
+	           .then(response => {
+	               if (response.ok) {
+	                   alert("계좌 정보가 성공적으로 저장되었습니다.");
+	                   window.location.reload(); // 페이지 새로고침
+	               } else {
+	                   alert("계좌 정보 저장에 실패했습니다.");
+	               }
+	           })
+	           .catch(error => console.error("Error:", error));
+	       }
+	   </script>
+</body>
+</html>

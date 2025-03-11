@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>상품 수정</title>
+</head>
+<body>
+    <h1>상품 수정</h1>
+    <form th:action="@{/admin/quality/modify}" method="post">
+        <!-- Hidden input to hold the product ID -->
+        <input type="hidden" name="productId" th:value="${quality.productId}" />
+
+        <div>
+            <label>상품명:</label>
+            <input type="text" name="productName" th:value="${quality.productName}" required />
+        </div>
+		<div>
+			<label>검수자:</label>
+		    <input type="text" name="checkPerson" th:value="${quality.checkPerson}" required />
+		</div>		
+        <div>
+            <label for="createdBy">리셀상품:</label>
+            <select id="createdBy" name="createdBy" required>
+                <option value="" disabled>리셀상품을 선택하세요</option>
+                <option th:each="createdBy : ${createdBys}"
+                        th:value="${createdBy}"
+                        th:text="${createdBy}"
+                        th:selected="${createdBy == quality.createdBy}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="color">색상:</label>
+            <select id="color" name="color" required>
+                <option value="" disabled>색상을 선택하세요</option>
+                <option th:each="color : ${colors}"
+                        th:value="${color}"
+                        th:text="${color}"
+                        th:selected="${color == quality.color}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="size">사이즈:</label>
+            <select id="size" name="size" required>
+                <option value="230" th:selected="${quality.size == '230'}">230</option>
+                <option value="240" th:selected="${quality.size == '240'}">240</option>
+                <option value="250" th:selected="${quality.size == '250'}">250</option>
+                <option value="260" th:selected="${quality.size == '260'}">260</option>
+                <option value="270" th:selected="${quality.size == '270'}">270</option>
+                <option value="280" th:selected="${quality.size == '280'}">280</option>
+                <option value="290" th:selected="${quality.size == '290'}">290</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="isArrived">상품도착여부:</label>
+            <select id="isArrived" name="isArrived" required>
+                <option value="" disabled>상품 도착 여부를 선택하세요</option>
+                <option th:each="isArrived : ${isArriveds}"
+                        th:value="${isArrived}"
+                        th:text="${isArrived}"
+                        th:selected="${isArrived == quality.isArrived}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="state">상태:</label>
+            <select id="state" name="state" required>
+                <option value="" disabled>상태를 선택하세요</option>
+                <option th:each="state : ${states}"
+                        th:value="${state}"
+                        th:text="${state}"
+                        th:selected="${state == quality.state}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="warrantyGrade">결과:</label>
+            <select id="warrantyGrade" name="warrantyGrade" required>
+                <option value="" disabled>결과를 선택하세요</option>
+                <option th:each="warrantyGrade : ${warrantyGrades}"
+                        th:value="${warrantyGrade}"
+                        th:text="${warrantyGrade}"
+                        th:selected="${warrantyGrade == quality.warrantyGrade}"></option>
+            </select>
+        </div>
+
+        <button type="submit">저장</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .like-button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .like-button.liked {
+            background-color: #ffcccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product List</h1>
+    <div th:if="${userId}">
+        <p>User ID: <span th:text="${userId}"></span></p>
+    </div>
+    <div th:unless="${userId}">
+        <p>로그인 후 이용해주세요.</p>
+    </div>
+    <div th:each="product : ${products}" class="product-item">
+        <h2 th:text="${product.name}"></h2>
+        <p>Brand: <span th:text="${product.brand}"></span></p>
+        <p>Price: <span th:text="${product.price}"></span></p>
+        <p>Likes: <span class="like-count" th:text="${product.likeCount}"></span></p>
+        <button class="like-button"
+                th:onclick="toggleLike(this, [[${product.id}]])">
+            좋아요
+        </button>
+        <a th:href="@{/products/{id}(id=${product.id})}">View Details</a>
+    </div>
+    <script th:inline="javascript">
+    function toggleLike(button, productId) {
+        if (!productId) {
+            console.error('Product ID is undefined');
+            return;
+        }
+        
+        fetch(`/api/products/${productId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (response.status === 401) {
+                throw new Error('unauthorized');
+            }
+            if (!response.ok) {
+                throw new Error('network error');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 좋아요 버튼 상태 변경
+            if (data.liked) {
+                button.classList.add('liked');
+            } else {
+                button.classList.remove('liked');
+            }
+            
+            // 좋아요 카운트 업데이트 - 수정된 부분
+            const productContainer = button.closest('.product-item');
+            const likeCountElement = productContainer.querySelector('.like-count');
+            if (likeCountElement) {
+                likeCountElement.textContent = data.likeCount;
+            }
+            
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (error.message === 'unauthorized') {
+                alert('로그인이 필요한 서비스입니다.');
+            } else {
+                alert('좋아요 처리 중 오류가 발생했습니다.');
+            }
+        });
+    }
+    </script>
+</body>
+</html>

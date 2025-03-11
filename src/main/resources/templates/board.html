@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 - Trendy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+        aside {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-right: 1px solid #ddd;
+        }
+        aside button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        aside ul li {
+            margin: 10px 0;
+        }
+        aside ul li a {
+            text-decoration: none;
+            color: blue;
+        }
+        main {
+            display: flex;
+        }
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .category-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .category-bar a {
+            text-decoration: none;
+            color: black;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .category-bar a:hover {
+            background-color: #ddd;
+        }
+        .board table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .board th, .board td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .board tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .board tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+          <a href="/main" style="color: red; font-style: italic; text-decoration: none;">Trendy</a>
+        </h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul class="menu">
+                <li><a href="/board?category=all">전체</a></li>
+                <li><a href="/list">자주 묻는 질문</a></li>
+                <li><a href="/board?category=location">매장위치 안내</a></li>
+            </ul>
+            <button class="chat-button">카카오톡 상담하기</button>
+        </aside>	
+        <div class="content">
+            <div class="category-bar">
+                <a href="/board?category=all">전체</a>
+                <a href="/board?category=policy">이용정책</a>
+                <a href="/board?category=common">공통</a>
+                <a href="/board?category=purchase">구매</a>
+                <a href="/board?category=sale">판매</a>
+            </div>
+            <section class="board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>제목</th>
+                            <th>상세보기</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="notice : ${notices}">
+                            <td th:text="${notice.title}"></td>
+                            <td>
+                                <a th:href="@{/CustomerCenter/detail/{id}(id=${notice.noticeEventId})}">상세보기</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

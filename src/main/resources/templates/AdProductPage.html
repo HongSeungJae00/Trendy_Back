@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <a href="/admin/product/register">Register New Product</a>
+	<form action="/admin/product/search" method="get">
+	    <!-- 검색 -->
+	    <label for="value">검색(Product ID):</label>
+	    <input type="text" name="value" id="value" placeholder="상품 ID 입력">
+
+	    <!-- 브랜드 찾기 -->
+	    <label for="brand">브랜드 찾기:</label>
+	    <select name="brand" id="brand" onchange="this.form.submit()">
+	        <option value="" selected>전체</option>
+	        <option th:each="brand : ${brands}" th:value="${brand}" th:text="${brand}"></option>
+	    </select>
+
+	    <!-- 검색 버튼 -->
+	    <button type="submit">검색</button>
+	</form>
+	<form th:action="@{/admin/product/delete-multiple}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+				<th></th>
+				<th>Brand</th>
+                <th>Name</th>
+				<th>ID</th>
+                <th>Size</th>
+				<th>Gender</th>
+                <th>Stock</th>
+				<th>Price</th>
+				<th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+				<td><input type="checkbox" name="productIds" th:value="${product.productId}" /></td>
+				<td th:text="${product.brand}"></td>
+				<td th:text="${product.productName}"></td>
+				<td th:text="${product.productId}"></td>
+				<td th:text="${product.size}"></td>  
+				<td th:text="${product.gender}"></td>
+                <td th:text="${product.stockQuantity}"></td>
+				<td th:text="${product.price}"></td>
+                <td>
+                    <a th:href="@{/admin/product/modify(productId=${product.productId})}">Modify</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+	<button type="submit">Delete Selected</button>
+	</form>
+	<button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+</html>

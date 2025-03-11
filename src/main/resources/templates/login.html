@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .login-container {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .login-container h1 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .kakao-button {
+            background-color: #FEE500;
+            color: #3C1E1E;
+        }
+        .naver-button {
+            background-color: #03C75A;
+            color: white;
+        }
+        .google-button {
+            background-color: gray;
+            color: yellow;
+        }
+        .local-login input {
+            width: calc(100% - 20px);
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .local-login .login-btn {
+            background-color: #007BFF;
+            color: white;
+        }
+        .local-login .signup-btn {
+            background-color: #28A745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>로그인</h1>
+        
+        <!-- 로컬 로그인 -->
+		<form action="/perform_login" method="post">
+		    <input type="email" name="username" placeholder="이메일을 입력하세요">
+		    <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+		    <button type="submit">로그인</button>
+		</form>
+		<a href="/signup">회원가입</a>
+
+        <!-- 소셜 로그인 -->
+        <form action="/oauth2/authorization/kakao" method="get">
+            <button type="submit" class="kakao-button">카카오 로그인</button>
+        </form>
+        <form action="/oauth2/authorization/google" method="get">
+            <button type="submit" class="google-button">구글 로그인</button>
+        </form>
+        <form action="/oauth2/authorization/naver" method="get">
+            <button type="submit" class="naver-button">네이버 로그인</button>
+        </form>
+    </div>
+</body>
+</html>

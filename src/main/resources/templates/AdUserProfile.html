@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Management</title>
+</head>
+<body>
+    <h1>회원 정보</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>비밀번호</th>
+                    <th>휴대폰번호</th>
+					<th>이메일</th>
+					<th>주소</th>
+					<th>가입일</th>
+					<th>구매정보</th>
+					<th>판매정보</th>
+                </tr>
+            </thead>
+			<tbody>
+			    <tr>
+			        <td th:text="${user.username}"></td>
+			        <td th:text="${user.userId}"></td>
+			        <td>******</td>
+			        <td th:text="${user.phoneNumber}"></td>
+			        <td th:text="${user.email}"></td>
+			        <td th:text="${user.shippingAddress}"></td>
+			        <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></td>
+			    	<td>
+						총 구매 횟수: <span th:text="${purchaseInfo.totalPurchases}"></span><br>
+						총 구매 금액: <span th:text="${purchaseInfo.totalPurchaseAmount}"></span> 원<br>
+					</td>
+					<td>
+						총 판매 횟수: <span th:text="${salesInfo.totalSales}"></span><br>
+						총 판매 금액: <span th:text="${salesInfo.totalSalesAmount}"></span> 원
+					</td>
+				</tr>
+			</tbody>
+        </table>
+		<a href="/admin/user">유저</a>
+</body>
+</html>

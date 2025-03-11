@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 상세</title>
+</head>
+<body>
+    <h1>게시물 상세</h1>
+
+    <div>
+        <label>제목:</label>
+        <span th:text="${notice.title}"></span>
+    </div>
+	<div>
+	    <label>카테고리:</label>
+	    <span th:text="${notice.category}"></span>
+	</div>
+    <div>
+        <label>내용:</label>
+        <span th:text="${notice.content}"></span>
+    </div>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<!-- 댓글 입력 폼 -->
+	<div>
+	    <!-- inquiryId를 hidden input으로 추가 -->
+	    <input type="hidden" id="currentInquiryId" th:value="${inquiryId}">
+	    <form id="commentForm">
+	        <div>
+	            <textarea id="commentContent" rows="3" placeholder="댓글을 입력하세요"></textarea>
+	        </div>
+	        <button type="button" onclick="submitComment()">댓글 작성</button>
+	    </form>
+	</div>
+
+	<!-- 댓글 목록 -->
+	<div>
+	    <h4>댓글 목록</h4>
+	    <div th:each="comment : ${comments}">
+	        <div>
+	            <span>관리자</span>
+	            <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+	        </div>
+	        <div th:text="${comment.content}"></div>
+	    </div>
+	</div>
+    <button onclick="location.href='/admin/notice'">뒤로가기</button>
+</body>
+<script th:inline="javascript">
+function submitComment() {
+    // hidden input에서 inquiryId 가져오기
+    const inquiryId = document.getElementById('currentInquiryId').value;
+    const content = document.getElementById('commentContent').value;
+    
+    console.log('inquiryId:', inquiryId); // 디버깅용
+    
+    if (!content.trim()) {
+        alert('댓글 내용을 입력해주세요.');
+        return;
+    }
+    
+    const data = {
+        inquiryId: parseInt(inquiryId), // 문자열을 숫자로 변환
+        userId: 1,
+        content: content
+    };
+    
+    console.log('전송할 데이터:', data); // 디버깅용
+
+    fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(text || '서버 응답 오류');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        alert('댓글이 작성되었습니다.');
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('댓글 작성에 실패했습니다: ' + error.message);
+    });
+}
+</script>
+</html>

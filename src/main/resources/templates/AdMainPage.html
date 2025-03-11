@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trendy - 관리자 페이지</title>
+</head>
+<body>
+    <div style="text-align: right;">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
+
+    <!-- 주문 및 결제 관리 섹션 -->
+    <div>
+        <h2>주문 및 결제 관리</h2>
+        <select name="sort">
+            <option value="all" selected>전체</option>
+        </select>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>주문번호</th>
+                    <th>고객명</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>총액</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}"></td>
+                    <td th:text="${order.userId}"></td>
+                    <td th:text="${order.modelId}"></td>
+                    <td th:text="${order.quantity}"></td>
+                    <td th:text="${#numbers.formatInteger(order.price, 0, 'COMMA') + '원'}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 재고 관리 섹션 -->
+    <div>
+        <h2>재고 관리</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>상품번호</th>
+                    <th>상품명</th>
+                    <th>위치</th>
+                    <th>사이즈</th>
+                    <th>수량</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="stock : ${stocks}">
+                    <td th:text="${stock.modelId}"></td>
+                    <td th:text="${stock.brand}"></td>
+                    <td th:text="${stock.warehouseId}"></td>
+                    <td th:text="${stock.size}"></td>
+                    <td th:text="${stock.stockQuantity}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

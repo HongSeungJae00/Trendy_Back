@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Management</title>
+</head>
+<body>
+    <h1>Order Management</h1>
+    <a href="/admin/order/register">New Order</a>
+	<form th:action="@{/admin/order/delete-multiple}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+				<th></th>
+                <th>Order ID</th>
+                <th>User ID</th>
+				<th>Product ID</th>
+                <th>Total Price</th>
+                <th>Status</th>
+				<th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orders}">
+				<td><input type="checkbox" name="orderIds" th:value="${order.orderId}" /></td>
+                <td th:text="${order.orderId}"></td>
+                <td th:text="${order.userId}"></td>
+				<td th:text="${order.productId}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td th:text="${order.status}"></td>
+				<td th:text="${#dates.format(order.createdAt, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <a th:href="@{/admin/order/modify(orderId=${order.orderId})}">Modify</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+	<button type="submit">삭제</button>
+	</form>
+</body>
+</html>

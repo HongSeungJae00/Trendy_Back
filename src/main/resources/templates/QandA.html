@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: red;
+            font-style: italic;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        aside {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 15px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+        }
+
+        .faq-section {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .faq-section h1 {
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .faq-item {
+            cursor: pointer;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        .faq-item p {
+            margin: 0;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+
+        .support-time {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trendy</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul>
+                <li><a href="/notice">공지사항</a></li>
+                <li><a href="/QandA">자주묻는질문</a></li>
+                <li><a href="/standard">검수기준</a></li>
+            </ul>
+        </aside>
+		<section>
+        <div class="faq-section">
+            <h1>자주 묻는 질문</h1>
+            <div class="faq-item">
+                <p>배송은 얼마나 걸리나요?</p>
+                <div class="faq-answer">
+                    <ul>
+                        <li>						[대기 중 (구매 결정 대기)] 
+
+						 • 거래 대기 시점으로부터 15분 이내 '구매 결정' 또는 '구매 거부'가 가능하며,
+						    15분 경과 시 자동으로 '구매 결정' 처리 및 거래가 체결됩니다.
+
+						 • '구매 거부'는 계정당 1일 1회만 가능합니다.
+
+						     - TRENDY 앱  : 주문 내역 상세 보기 > 오른쪽 상단 • • • (더 보기) 클릭 > '구매 거부' 선택 
+
+						     - TRENDY PC 웹페이지 : 주문 내역 상세 보기 > 오른쪽 상단 '구매 거부' 선택
+
+						 
+
+						[대기 중 (상품 발송 대기)]
+
+						 • 판매자는 거래 체결 시점으로 48시간(일요일・공휴일 제외) 이내에 상품 발송 및 발송정보를 입력하여야 합니다.
+
+						 
+
+						[발송 완료]
+
+						 • 거래가 체결되어 판매자가 TRENDY으로 상품을 발송 후 발송 정보를 입력하였으며, 상품이 이동 중입니다.
+
+						 
+
+						[입고 대기]
+
+						 • TRENDY 검수센터에서 판매자가 입력한 발송 정보의 택배를 확인하였습니다.
+
+						 
+
+						[입고 완료]
+
+						 • 택배 박스를 개봉하여 체결된 거래 정보와 확인된 상품을 매칭합니다.
+
+						 • 발송 정보는 일치하나 상품이 일치하지 않는 경우 해당 단계에서 미입고 처리됩니다. 
+
+						 
+						[검수 중]
+
+						 • TRENDY의 전문 검수팀에서 상품 검수를 진행합니다. 
+
+						 • 거래 정보와 입고된 상품 또는 사이즈가 다른 경우 바로 검수 불합격 처리됩니다. 
+
+						 • 카테고리, 상품에 따라 검수 소요시간은 상이합니다.
+
+						 
+
+						 1) 검수 합격 : TRENDY 검수기준 내 합격되어 구매자에게 배송을 준비합니다.
+
+						 2) 검수 보류 : TRENDY 검수기준 내 '구매자 의사 확인'에 해당하여 구매 의사 답변을 선택해야 합니다.
+
+						 (최초 검수 보류 시점부터 24시간 이내 선택이 가능하며, 의사를 표시하지 않을 경우 자동으로 검수 합격 처리됩니다.)
+
+						 3) 검수 불합격 : TRENDY 검수기준 내 불합격되어 구매 시 결제하신 정보가 취소 처리됩니다.
+
+						      * 환불은 영업일 기준 3-5일 소요됩니다.
+
+						 
+
+						[배송 중]
+
+						 • 구매자에게 발송하는 운송 정보가 택배사에 접수되었습니다. 
+
+						 • 운송장 조회는 택배사 수거 이후 택배사에서 운송 흐름을 시스템 내 등록 시 가능합니다.</li>
+                        <!-- 나머지 상세 내용 -->
+                    </ul>
+                </div>
+            </div>
+            <div class="faq-item">
+                <p>교환/반품은 어떻게 하나요?</p>
+                <div class="faq-answer">
+					TRENDY은 개인 간 또는 '제휴 사업자', '입점 사업자'와 개인 간에 거래를 중개하는 플랫폼으로
+
+					안정적인 거래가 이루어질 수 있도록 서비스를 제공하고 있습니다.
+
+					  
+
+					개인 간의 거래는 거래 체결 이후 정상적인 거래 진행 중 또는 완료된 경우
+
+					단순 변심이나 실수 등에 의한 교환/ 반품이 어려운 점 안내드립니다.
+
+					  
+
+					* 브랜드 배송은 '브랜드 배송 진행과정을 설명해 주세요'를 참고 부탁드립니다.
+
+					* 입점 사업자의 상품은 '입점 사업자 상품 반품 과정이 궁금해요'를 참고 부탁드립니다. 
+                    <!-- 나머지 상세 내용 -->
+                </div>
+            </div>
+            <div class="faq-item">
+                <p>매장 픽업은 언제부터 가능한가요?</p>
+                <div class="faq-answer">
+					KREAM에서는 택배 발송을 통해서만 상품을 전달해 드리고 있습니다.
+
+					안타깝게도 현재 오프라인 스토어 등을 통한 직접 픽업 서비스는 마련되어 있지 않아
+					상품은 택배 기사님께서 안전하고 빠르게 배송해 주실 예정입니다. 
+                    <!-- 나머지 상세 내용 -->
+                </div>
+            </div>
+            <div class="support-time">
+                <h2>고객지원센터 운영시간</h2>
+                <p>평일: 오전 9:30 - 오후 6:00</p>
+            </div>
+        </div>
+		</section>
+    </main>
+    <script>
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const answer = item.querySelector('.faq-answer');
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                } else {
+                    answer.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

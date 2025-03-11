@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이 페이지 - Trendy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+        aside {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-right: 1px solid #ddd;
+        }
+        aside button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        aside ul li {
+            margin: 10px 0;
+        }
+        main {
+            display: flex;
+        }
+        .mypage-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        section {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .advertising-consent {
+            margin-top: 20px;
+        }
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .toggle-switch label {
+            margin-left: 10px;
+        }
+        .save-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .withdraw-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="/main" style="color: red; font-style: italic; text-decoration: none;">Trendy</a>
+        </h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <button class="register-button">판매 등록하기</button>
+            <ul>
+				<li><a href="/myloginInformation">로그인 정보</a></li>
+				<li><a href="/myInformation">내정보</a></li>
+				<li><a href="/addressbook">주소록</a></li>
+				<li><a href="/sellAccount">판매 정산 계좌</a></li>
+				<li><a href="/cashReceipt">현금영수증 정보</a></li>
+            </ul>
+        </aside>
+		 <section>
+		            <h2>회원탈퇴</h2>
+		            <p>Trendy를 탈퇴하면 회원 정보 및 서비스 이용 기록이 삭제됩니다.</p>
+		            <div class="checkbox">
+		                <input type="checkbox" id="delete-info">
+		                <label for="delete-info">내 프로필, 거래내역(구매/판매), 관심상품 등 모든 정보 삭제에 동의합니다.</label>
+		            </div>
+		            <div class="checkbox">
+		                <input type="checkbox" id="restricted-info">
+		                <label for="restricted-info">Trendy 탈퇴가 제한된 경우 안내 내용을 확인했습니다.</label>
+		            </div>
+		            <div class="checkbox">
+		                <input type="checkbox" id="confirm-all">
+		                <label for="confirm-all">회원탈퇴 안내를 모두 확인하였으며 탈퇴에 동의합니다.</label>
+		            </div>
+		            <div class="confirmation">탈퇴 후에는 복구가 불가능합니다.</div>
+		            <div class="actions">
+		                <button class="cancel-button" onclick="goBack()">취소하기</button>
+		                <button class="withdraw-button" onclick="withdraw()">탈퇴하기</button>
+		            </div>
+		        </section>
+				<script>
+				    // 취소 버튼: 이전 페이지로 돌아가기
+				    function goBack() {
+				        window.history.back();
+				    }
+
+				    // 탈퇴 버튼: 체크박스 확인 및 탈퇴 요청
+				    function withdraw() {
+				        const deleteInfo = document.getElementById('delete-info').checked;
+				        const restrictedInfo = document.getElementById('restricted-info').checked;
+				        const confirmAll = document.getElementById('confirm-all').checked;
+
+				        if (!deleteInfo || !restrictedInfo || !confirmAll) {
+				            alert("모두 체크해야만 탈퇴가 가능합니다.");
+				            return;
+				        }
+
+				        // 확인 팝업
+				        const confirmDeletion = confirm("회원 정보를 삭제하고 메인 페이지로 이동하시겠습니까?");
+				        if (!confirmDeletion) return;
+
+				        // 탈퇴 API 호출
+				        fetch('/api/user/withdraw', {
+				            method: 'DELETE',
+				            headers: { 'Content-Type': 'application/json' },
+				        })
+				        .then(response => {
+				            if (response.ok) {
+				                alert("회원탈퇴가 완료되었습니다.");
+				                window.location.href = '/main'; // 메인 페이지로 리다이렉트
+				            } else {
+				                alert("탈퇴에 실패했습니다. 다시 시도해주세요.");
+				            }
+				        })
+				        .catch(error => console.error("Error:", error));
+				    }
+				</script>
+		    </main>
+		</body>
+		</html>
+
+		
+		

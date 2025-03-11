@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Modification</title>
+</head>
+<body>
+    <h1>상품 수정</h1>
+    <form th:action="@{/admin/product/modify}" method="post" enctype="multipart/form-data">
+        <!-- Hidden input to hold the product ID -->
+        <input type="hidden" name="productId" th:value="${product.productId}" />
+
+        <div>
+            <label>상품명:</label>
+            <input type="text" name="productName" th:value="${product.productName}" required />
+        </div>
+
+        <div>
+            <label>수량:</label>
+            <input type="number" name="quantity" th:value="${product.quantity}" required />
+        </div>
+
+        <div>
+            <label>모델:</label>
+            <input type="text" name="modelId" th:value="${product.modelId}" required />
+        </div>
+
+        <div>
+            <label>판매 금액:</label>
+            <input type="number" name="price" th:value="${product.price}" required />
+        </div>
+
+        <div>
+            <label for="brand">브랜드:</label>
+            <select id="brand" name="brand" required>
+                <option value="" disabled>브랜드를 선택하세요</option>
+                <option th:each="brand : ${brands}"
+                        th:value="${brand}"
+                        th:text="${brand}"
+                        th:selected="${brand == product.brand}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="gender">성별:</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled>성별을 선택하세요</option>
+                <option th:each="gender : ${genders}"
+                        th:value="${gender}"
+                        th:text="${gender}"
+                        th:selected="${gender == product.gender}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="color">색상:</label>
+            <select id="color" name="color" required>
+                <option value="" disabled>색상을 선택하세요</option>
+                <option th:each="color : ${colors}"
+                        th:value="${color}"
+                        th:text="${color}"
+                        th:selected="${color == product.color}"></option>
+            </select>
+        </div>
+		<div>
+		    <label for="size">사이즈:</label>
+		    <select id="size" name="size" required>
+		        <option value="230" th:selected="${product.size == '230'}">230</option>
+		        <option value="240" th:selected="${product.size == '240'}">240</option>
+		        <option value="250" th:selected="${product.size == '250'}">250</option>
+		        <option value="260" th:selected="${product.size == '260'}">260</option>
+		        <option value="270" th:selected="${product.size == '270'}">270</option>
+		        <option value="280" th:selected="${product.size == '280'}">280</option>
+		        <option value="290" th:selected="${product.size == '290'}">290</option>
+		    </select>
+		</div>
+
+        <button type="submit">저장</button>
+    </form>
+</body>
+</html>

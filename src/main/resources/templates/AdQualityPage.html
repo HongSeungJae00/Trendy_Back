@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quality List</title>
+</head>
+<body>
+    <h1>Quality List</h1>
+
+	<form th:action="@{/admin/quality/delete-multiple}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+				<th></th>
+				<th>상품명</th>
+                <th>리셀상품</th>
+				<th>도착여부</th>
+                <th>상태</th>
+				<th>검수자</th>
+                <th>결과</th>
+				<th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="quality : ${qualitys}">
+				<td><input type="checkbox" name="productIds" th:value="${quality.productId}" /></td>
+				<td th:text="${quality.productName}"></td>
+				<td th:text="${quality.createdBy}"></td>
+				<td th:text="${quality.isArrived}"></td>
+				<td th:text="${quality.state}"></td>  
+				<td th:text="${quality.checkPerson}"></td>
+                <td th:text="${quality.warrantyGrade}"></td>
+                <td>
+                    <a th:href="@{/admin/quality/modify(productId=${quality.productId})}">Modify</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+	</form>
+	<button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+</html>

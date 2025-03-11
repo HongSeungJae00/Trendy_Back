@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>재고 상세/수정</title>
+</head>
+<body>
+    <div>
+        <h2>재고 상세/수정</h2>
+        
+        <form th:action="@{/admin/stock/{id}/modify(id=${stock.stockId})}" method="post" th:object="${stock}">
+            <input type="hidden" th:field="*{stockId}">
+            
+            <div>
+                <label for="brand">브랜드명</label>
+                <select id="brand" th:field="*{brand}">
+                    <option value="">브랜드 선택</option>
+                    <option value="Nike">Nike</option>
+                    <option value="Adidas">Adidas</option>
+                    <option value="Asics">Asics</option>
+                    <option value="New_Balance">New Balance</option>
+                    <option value="Reebok">Reebok</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="modelId">상품명</label>
+                <input type="text" id="modelId" th:field="*{modelId}" required>
+            </div>
+
+            <div>
+                <label for="productId">상품번호</label>
+                <input type="number" id="productId" th:field="*{productId}" required>
+            </div>
+
+            <div>
+                <label for="warehouseId">재고창고</label>
+                <select id="warehouseId" th:field="*{warehouseId}" required>
+                    <option value="">창고장소 선택</option>
+                    <option th:each="warehouse : ${warehouses}"
+                            th:value="${warehouse.warehouseId}"
+                            th:text="${warehouse.region}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label for="stockQuantity">재고량</label>
+                <input type="number" id="stockQuantity" th:field="*{stockQuantity}" min="0" required>
+            </div>
+
+            <div>
+                <label for="size">사이즈</label>
+                <select id="size" th:field="*{size}" required>
+                    <option value="">사이즈 선택</option>
+                    <option value="230">230</option>
+                    <option value="240">240</option>
+                    <option value="250">250</option>
+                    <option value="260">260</option>
+                    <option value="270">270</option>
+                    <option value="280">280</option>
+                    <option value="290">290</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="warrantyGrade">재고상태</label>
+                <select id="warrantyGrade" th:field="*{warrantyGrade}" required>
+                    <option value="">재고상태 선택</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="Fail">Fail</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="gender">성별</label>
+                <select id="gender" th:field="*{gender}" required>
+                    <option value="">성별 선택</option>
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="color">색상</label>
+                <input type="text" id="color" th:field="*{color}" required>
+            </div>
+
+            <div>
+                <button type="button" onclick="location.href='/admin/stock'">목록</button>
+                <button type="submit">수정</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

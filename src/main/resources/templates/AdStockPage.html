@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>재고 목록</title>
+    <script>
+        function toggleAllCheckboxes() {
+            const mainCheckbox = document.getElementById('selectAll');
+            const checkboxes = document.getElementsByName('selectedStocks');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = mainCheckbox.checked;
+            });
+        }
+
+        function deleteSelectedStocks() {
+            const checkboxes = document.getElementsByName('selectedStocks');
+            const selectedIds = [];
+            
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedIds.push(checkbox.value);
+                }
+            });
+
+            if (selectedIds.length === 0) {
+                alert('삭제할 항목을 선택해주세요.');
+                return;
+            }
+
+            if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <h2>재고 목록</h2>
+        
+        <div>
+            <a th:href="@{/admin/stock/register}" class="btn-register">재고 등록</a>
+            <button type="button" onclick="deleteSelectedStocks()">선택 삭제</button>
+        </div>
+
+        <form id="deleteForm" th:action="@{/admin/stock/delete}" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleAllCheckboxes()"></th>
+                        <th>브랜드</th>
+                        <th>상품명</th>
+                        <th>상품번호</th>
+                        <th>창고</th>
+                        <th>재고량</th>
+                        <th>사이즈</th>
+                        <th>재고상태</th>
+                        <th>성별</th>
+                        <th>색상</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="stock : ${stocks}">
+                        <td><input type="checkbox" name="selectedStocks" th:value="${stock.stockId}"></td>
+                        <td th:text="${stock.brand}"></td>
+                        <td th:text="${stock.modelId}"></td>
+                        <td th:text="${stock.productId}"></td>
+                        <td th:text="${stock.warehouseId}"></td>
+                        <td th:text="${stock.stockQuantity}"></td>
+                        <td th:text="${stock.size}"></td>
+                        <td th:text="${stock.warrantyGrade}"></td>
+                        <td th:text="${stock.gender}"></td>
+                        <td th:text="${stock.color}"></td>
+                        <td>
+                            <a th:href="@{/admin/stock/{id}/modify(id=${stock.stockId})}">상세/수정</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ec2-user/Trendy_Back
+    overwrite: yes
+
+permissions:
+  - object: /home/ec2-user/Trendy_Back
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+    type:
+      - file
+
+hooks:
+  BeforeInstall:
+    - location: scripts/clean_previous_files.sh
+      timeout: 300
+      runas: root
+    - location: scripts/stop_app.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: scripts/deploy_app.sh
+      timeout: 300
+      runas: root
+    - location: scripts/start_app.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/check_health.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
+      runas: root

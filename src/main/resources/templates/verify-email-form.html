@@ -1,0 +1,32 @@
+<!-- src/main/resources/templates/verify-email-form.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>이메일 인증</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>이메일 인증</h1>
+    <p>전송된 인증 코드를 입력하여 이메일 인증을 완료해주세요.</p>
+    
+    <form th:action="@{/signup/verify-email}" method="post">
+        <input type="hidden" name="email" th:value="${email}" />
+        <label for="code">인증 코드:</label>
+        <input type="text" id="code" name="code" required pattern="\d{6}" title="6자리 숫자 코드" />
+        <button type="submit">인증 완료</button>
+    </form>
+    
+    <div th:if="${message}">
+        <p th:text="${message}" style="color: green;"></p>
+    </div>
+    
+    <div th:if="${error}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
+    
+    <form th:action="@{/signup/resend-verification}" method="post">
+        <input type="hidden" name="email" th:value="${email}" />
+        <button type="submit">인증 코드 재전송</button>
+    </form>
+</body>
+</html>

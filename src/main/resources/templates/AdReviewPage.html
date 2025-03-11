@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Review Management</title>
+</head>
+<body>
+    <h1>리뷰 관리</h1>
+	<div style="margin-bottom: 20px;">
+	    <a href="/admin/review/register">
+	        <button type="button">리뷰 등록</button>
+	    </a>
+	</div>
+	<form action="/admin/review/search" method="get">
+	    <label for="criteria">검색 기준:</label>
+	    <select name="criteria" id="criteria">
+	        <option value="">전체</option>
+	        <option value="productId">상품 ID</option>
+	        <option value="userId">작성자 ID</option>
+	    </select>
+	    <label for="value">검색 값:</label>
+	    <input type="number" name="value" id="value">
+	    <label for="sortOption">정렬 옵션:</label>
+	    <select name="sortOption" id="sortOption">
+	        <option value="latest">최신순</option>
+	        <option value="oldest">오래된 순</option>
+	        <option value="userIdAsc">작성자 ID 낮은 순</option>
+	        <option value="userIdDesc">작성자 ID 높은 순</option>
+	    </select>
+	    <button type="submit">검색</button>
+	</form>
+
+    <form th:action="@{/admin/review/delete-multiple}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="checkAll" onclick="toggleAllChecks(this)" /></th>
+                    <th>No</th>
+                    <th>작성자</th>
+                    <th>상품 ID</th>
+                    <th>내용</th>
+                    <th>작성일</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="review, iterStat : ${reviews}">
+                    <td><input type="checkbox" name="reviewIds" th:value="${review.reviewId}" /></td>
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${review.userId}"></td>
+                    <td th:text="${review.productId}"></td>
+                    <td th:text="${review.content}"></td>
+                    <td th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></td>
+                    <td>
+                        <a th:href="@{/admin/review/modify(reviewId=${review.reviewId})}">수정</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit">삭제</button>
+    </form>
+	<button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+</html>

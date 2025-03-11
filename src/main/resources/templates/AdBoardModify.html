@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 수정</title>
+</head>
+<body>
+    <h1>게시물 수정</h1>
+    <form th:action="@{/admin/board/modify}" method="post">
+        <input type="hidden" th:name="noticeEventId" th:value="${board.noticeEventId}" />
+
+		<div>
+			<label for="type">유형:</label>
+				<select id="type" name="type" required>
+				<option value="notice" th:selected="${board.type == 'notice'}">공지</option>
+				<option value="event" th:selected="${board.type == 'notice'}">이벤트</option>
+			</select>
+		</div>
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" th:name="title" th:value="${board.title}" required />
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" th:name="content" required th:text="${board.content}"></textarea>
+        </div>
+        <div>
+            <button type="submit">수정</button>
+        </div>
+    </form>
+    <form th:action="@{/admin/board/delete}" method="post" style="margin-top: 10px;">
+        <input type="hidden" th:name="noticeEventId" th:value="${board.noticeEventId}" />
+        <button type="submit">삭제</button>
+    </form>
+    <button onclick="location.href='/admin/board'">뒤로가기</button>
+</body>
+</html>

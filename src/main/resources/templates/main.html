@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        .styled-image {
+            text-align: center;
+            width: 100%; /* 화면 너비에 맞게 */
+            max-width: 600px; /* 최대 너비 제한 */
+            border: 2px solid #ccc; /* 테두리 */
+            border-radius: 10px; /* 둥근 모서리 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: green;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+	<script>
+	    async function handlePayment(provider) {
+	        const orderId = 1; // Orders 테이블의 Order ID
+	        const userId = "testUser"; // 사용자 ID
+	        const amount = 10000; // 결제 금액
+
+	        try {
+	            const response = await fetch(`http://localhost:8080/payment/${provider}/ready`, {
+	                method: "POST",
+	                headers: {
+	                    "Content-Type": "application/x-www-form-urlencoded",
+	                },
+	                body: new URLSearchParams({
+	                    orderId: orderId,
+	                    userId: userId,
+	                    amount: amount,
+	                }),
+	            });
+
+	            if (!response.ok) {
+	                throw new Error("결제 준비 요청 실패");
+	            }
+
+	            const paymentUrl = await response.text();
+	            window.location.href = paymentUrl;
+	        } catch (error) {
+	            console.error(`[${provider}] 결제 요청 중 오류 발생:`, error);
+	            alert(`[${provider}] 결제 요청 중 오류가 발생했습니다.`);
+	        }
+	    }
+
+		document.addEventListener("DOMContentLoaded", () => {
+		    document.querySelector("#kakaoPayButton").addEventListener("click", () =>
+		        handlePayment("kakaopay")
+		    );
+		    document.querySelector("#naverPayButton").addEventListener("click", () =>
+		        handlePayment("naverpay")
+		    );
+		});
+
+	</script>
+
+
+</head>
+<body>
+    <h1>Welcome to the Main Page</h1>
+    <div>	
+        <img src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.ytimg.com%2Fvi%2FEUgtk6ANKdo%2Fhq720.jpg&type=sc960_832" alt="포켓몬스터 뮤" width="500" height="400" class="styled-image">
+    </div>
+    
+    <a href="/login" class="button">로그인 페이지로 이동</a>
+
+	<!-- 카카오페이 테스트 버튼 -->
+	<button id="kakaoPayButton" class="button" style="background-color: orange;">
+	    카카오페이 테스트 결제
+	</button>
+	
+	<!-- 네이버페이 테스트 버튼 -->
+	<button id="naverPayButton" class="button" style="background-color: blue;">
+	    네이버페이 테스트 결제
+	</button>
+	
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>문의사항</title>
+</head>
+<body>
+    <h1>문의사항</h1>
+	<div>
+	    <!-- 카테고리 검색 -->
+	    <form id="searchForm" method="get" th:action="@{/admin/notice/list}">
+	        <input type="text" id="searchCategory" name="category" 
+	               th:value="${param.category}" placeholder="카테고리 검색">
+	        <input type="hidden" id="sortOrder" name="sort" 
+	               th:value="${param.sort ?: 'desc'}">
+	        <button type="submit">검색</button>
+	    
+	        <!-- 정렬 옵션 -->
+	        <select id="sortSelect" onchange="changeSort()">
+	            <option value="desc" th:selected="${param.sort == null || param.sort == 'desc'}">최신순</option>
+	            <option value="asc" th:selected="${param.sort == 'asc'}">오래된순</option>
+	        </select>
+	    </form>
+	</div>
+	<form th:action="@{/admin/notice/delete-multiple}" method="post">delivery
+    <table border="1">
+        <thead>
+            <tr>
+				<th>선택</th>
+				<th>번호</th>
+                <th>작성일</th>
+                <th>제목</th>
+                <th>카테고리</th>
+				<th>작성자</th>
+				<th>상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="notice : ${notices}">
+				<td><input type="checkbox" name="inquiryIds" th:value="${notice.inquiryId}" /></td>
+				<td><a th:href="@{/admin/notice/detail(inquiryId=${notice.inquiryId})}" th:text="${notice.inquiryId}"></a></td>
+                <td th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
+                <td th:text="${notice.title}">제목</td>
+                <td th:text="${notice.category}">카테고리</td>
+				<td th:text="${notice.userId}">작성자</td>
+				<td th:text="${notice.content}">상태</td>
+            </tr>
+        </tbody>
+    </table>
+	<button type="submit">삭제</button>
+	</form>
+    <button onclick="location.href='/mypage'">뒤로가기</button>
+</body>
+<script>
+function changeSort() {
+    const sortValue = document.getElementById('sortSelect').value;
+    document.getElementById('sortOrder').value = sortValue;
+    document.getElementById('searchForm').submit();
+}
+</script>
+</html>

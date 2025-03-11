@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: red;
+            font-style: italic;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        aside {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 15px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+        }
+
+        .address-section {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .address-section h2 {
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .add-address-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .address-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .address-item {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .address-item h4 {
+            margin: 0;
+            color: black;
+        }
+
+        .address-item p {
+            margin: 0;
+            color: gray;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .address-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .address-actions .default-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .address-actions .edit-btn,
+        .address-actions .delete-btn {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 400px;
+        }
+
+        .popup input,
+        .popup button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .popup button {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .popup button.close-btn {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trendy</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul>
+				<button class="register-btn" onclick="window.location.href='/product-registration'">판매 등록하기</button>
+                <li><a href="/myloginInformation">로그인 정보</a></li>
+                <li><a href="/myInformation">내정보</a></li>
+                <li><a href="/addressbook">주소록</a></li>
+                <li><a href="/sellAccount">판매 정산 계좌</a></li>
+                <li><a href="/cashReceipt">현금영수증 정보</a></li>
+            </ul>
+        </aside>
+        <section class="address-section">
+            <h2>주소록</h2>
+            <button class="add-address-btn" onclick="showPopup()">+ 새 배송지 추가</button>
+            <div class="address-list" id="addressList">
+                <!-- 서버에서 가져온 주소가 이곳에 추가됩니다. -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 팝업 -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="popup" id="popup">
+        <h3>새 배송지 추가</h3>
+        <input type="text" id="username" placeholder="이름">
+        <input type="text" id="phoneNumber" placeholder="전화번호">
+        <input type="text" id="sample6_postcode" placeholder="우편번호">
+        <input type="button" value="우편번호 찾기" onclick="sample6_execDaumPostcode()">
+        <input type="text" id="sample6_address" placeholder="주소">
+        <input type="text" id="sample6_detailAddress" placeholder="상세주소">
+        <button onclick="saveAddress()">저장</button>
+        <button class="close-btn" onclick="closePopup()">닫기</button>
+    </div>
+
+    <script>
+        // 주소 데이터 불러오기
+        async function loadAddresses() {
+            const response = await fetch('/api/address?userId=1'); // 로그인 사용자 ID
+            if (response.ok) {
+                const addresses = await response.json();
+                const addressList = document.getElementById('addressList');
+                addressList.innerHTML = ''; // 기존 데이터 초기화
+                addresses.forEach(address => {
+                    const addressItem = `
+                        <div class="address-item">
+                            <h4>${address.name}</h4>
+                            <p>${address.phone}</p>
+                            <p>${address.address}</p>
+                            <div class="address-actions">
+                                <button class="default-btn" onclick="setDefault('${address.id}')">기본 배송지로 설정</button>
+                                <button class="edit-btn">수정</button>
+                                <button class="delete-btn" onclick="deleteAddress('${address.id}')">삭제</button>
+                            </div>
+                        </div>
+                    `;
+                    addressList.insertAdjacentHTML('beforeend', addressItem);
+                });
+            } else {
+                console.error('주소 데이터를 불러오는 중 오류 발생');
+            }
+        }
+
+        // 기본 배송지 설정
+        async function setDefault(id) {
+            const response = await fetch(`/api/address/${id}/default`, { method: 'PUT' });
+            if (response.ok) {
+                alert('기본 배송지로 설정되었습니다.');
+                loadAddresses();
+            } else {
+                alert('기본 배송지 설정에 실패했습니다.');
+            }
+        }
+
+        // 주소 삭제
+        async function deleteAddress(id) {
+            const response = await fetch(`/api/address/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert('주소가 삭제되었습니다.');
+                loadAddresses();
+            } else {
+                alert('주소 삭제에 실패했습니다.');
+            }
+        }
+
+        // 팝업 열기
+        function showPopup() {
+            document.getElementById('popupOverlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        // 팝업 닫기
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // 페이지 로드 시 주소 데이터 로드
+        document.addEventListener('DOMContentLoaded', loadAddresses);
+    </script>
+</body>
+</html>

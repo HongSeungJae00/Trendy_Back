@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Review Modification</title>
+</head>
+<body>
+    <h1>리뷰 수정</h1>
+    <form th:action="@{/admin/review/modify}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="reviewId" th:value="${review.reviewId}" />
+        <div>
+            <label>작성자:</label>
+            <input type="text" name="userId" th:value="${review.userId}" readonly />
+        </div>
+        <div>
+            <label>상품 ID:</label>
+            <input type="text" name="productId" th:value="${review.productId}" readonly />
+        </div>
+        <div>
+            <label>내용:</label>
+            <textarea name="content" rows="5" th:text="${review.content}"></textarea>
+        </div>
+        <button type="submit">수정</button>
+    </form>
+    <form th:action="@{/admin/review/delete}" method="post">
+        <input type="hidden" name="reviewId" th:value="${review.reviewId}" />
+        <button type="submit" style="background-color: red; color: white;">삭제</button>
+    </form>
+</body>
+</html>

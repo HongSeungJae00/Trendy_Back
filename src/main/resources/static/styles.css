@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+button.like-button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button.like-button.liked {
+    background-color: #ff6b6b;
+    color: white;
+}

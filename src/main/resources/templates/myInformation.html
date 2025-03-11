@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이 페이지 - Trendy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+        aside {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-right: 1px solid #ddd;
+        }
+        aside button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        aside ul li {
+            margin: 10px 0;
+        }
+        main {
+            display: flex;
+        }
+        .mypage-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        section {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .advertising-consent {
+            margin-top: 20px;
+        }
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .toggle-switch label {
+            margin-left: 10px;
+        }
+        .save-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .withdraw-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="/main" style="color: red; font-style: italic; text-decoration: none;">Trendy</a>
+        </h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <button class="register-btn" onclick="window.location.href='/product-registration'">판매 등록하기</button>
+            <ul>
+				<li><a href="/myloginInformation">로그인 정보</a></li>
+				<li><a href="/myInformation">내정보</a></li>
+				<li><a href="/addressbook">주소록</a></li>
+				<li><a href="/sellAccount">판매 정산 계좌</a></li>
+				<li><a href="/cashReceipt">현금영수증 정보</a></li>
+            </ul>
+        </aside>
+        <section>
+            <h2>내 계정</h2>
+			<div>
+			    <label for="email">이메일 주소</label>
+			    <input type="email" id="email" disabled>
+			    <button class="edit-button" onclick="updateField('email')">변경</button>
+			</div>
+			<div>
+			    <label for="password">비밀번호</label>
+			    <input type="password" id="password">
+			    <button class="edit-button" onclick="updateField('password')">변경</button>
+			</div>
+			<br><h2>개인 정보</h2>
+			<div>
+			    <label for="phone">휴대폰 번호</label>
+			    <input type="text" id="phone">
+			    <button class="edit-button" onclick="updateField('phone')">변경</button>
+			</div>
+			<div>
+			    <label for="shoeSize">신발 사이즈</label>
+			    <input type="text" id="shoeSize">
+			    <button class="edit-button" onclick="updateField('shoeSize')">변경</button>
+			</div>
+
+			<script>
+			    // 유저 정보 로드
+			    document.addEventListener("DOMContentLoaded", function() {
+			        fetch("/api/user/me")
+			            .then(response => response.json())
+			            .then(data => {
+			                document.getElementById("email").value = data.email;
+			                document.getElementById("phone").value = data.phone_number || "";
+			                document.getElementById("shoeSize").value = data.shoe_size || "";
+			            });
+			    });
+
+			    // 필드 업데이트 함수
+			    function updateField(field) {
+			        const value = document.getElementById(field).value;
+			        const payload = { [field]: value };
+			        fetch("/api/user/update", {
+			            method: "POST",
+			            headers: {
+			                "Content-Type": "application/json"
+			            },
+			            body: JSON.stringify(payload)
+			        })
+			        .then(response => {
+			            if (response.ok) {
+			                alert(`${field}가 성공적으로 변경되었습니다.`);
+			                window.location.reload();
+			            } else {
+			                alert(`${field} 변경에 실패했습니다.`);
+			            }
+			        });
+			    }
+			</script>
+            <div class="advertising-consent">
+				<br>
+                <h3>광고성 정보 수신</h3>
+                <p>개인 정보 수집 및 이용 동의 <a href="/privacy">자세히 보기</a></p>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="sms-consent">
+                    <label for="sms-consent">문자 메시지</label>
+                </div>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="email-consent">
+                    <label for="email-consent">이메일</label>
+                </div>
+            </div>
+            <button class="save-button" onclick="updateAdvertisingPreferences()">저장</button>
+            <button class="withdraw-button" onclick="location.href='/withdraw'">회원탈퇴</button>
+        </section>
+		<script>
+		    document.getElementById("save-button").addEventListener("click", () => {
+		        const data = {
+		            email: document.getElementById("email").value,
+		            password: document.getElementById("password").value,
+		            phone_number: document.getElementById("phone").value,
+		            user_shoe_size: document.getElementById("shoeSize").value,
+		            message: document.getElementById("messageConsent").checked,
+		            email_spam: document.getElementById("emailConsent").checked
+		        };
+
+		        fetch("/api/mypage/update", {
+		            method: "POST",
+		            headers: {
+		                "Content-Type": "application/json"
+		            },
+		            body: JSON.stringify(data)
+		        })
+		        .then(response => {
+		            if (response.ok) {
+		                alert("정보가 성공적으로 저장되었습니다.");
+		            } else {
+		                alert("정보 저장에 실패했습니다.");
+		            }
+		        })
+		        .catch(error => console.error("Error:", error));
+		    });
+		</script>
+		<script>
+		    function updateAdvertisingPreferences() {
+		        const message = document.getElementById('messageCheckbox').checked;
+		        const emailSpam = document.getElementById('emailSpamCheckbox').checked;
+
+		        const payload = { message, email_spam: emailSpam };
+
+		        fetch("/api/user/update-advertising-preferences", {
+		            method: "POST",
+		            headers: {
+		                "Content-Type": "application/json"
+		            },
+		            body: JSON.stringify(payload)
+		        })
+		        .then(response => {
+		            if (response.ok) {
+		                alert("광고성 정보 수신 설정이 저장되었습니다.");
+		                window.location.reload();
+		            } else {
+		                alert("설정 저장에 실패했습니다.");
+		            }
+		        });
+		    }
+		</script>
+    </main>
+</body>
+</html>

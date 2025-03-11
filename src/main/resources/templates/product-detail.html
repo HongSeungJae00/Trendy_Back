@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .like-button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .like-button.liked {
+            background-color: #ffcccc;
+        }
+        .delivery-info {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .delivery-method {
+            margin-bottom: 20px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .pickup-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .delivery-section {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Detail</h1>
+    
+    <div th:if="${userId}" class="user-info">
+        <p>User ID: <span th:text="${userId}"></span></p>
+    </div>
+
+    <div th:if="${product}" class="product-detail">
+        <h2 th:text="${product.name}">상품명</h2>
+        <div class="product-info">
+            <p>브랜드: <span th:text="${product.brand}">브랜드</span></p>
+            <p>가격: <span th:text="${product.price}">가격</span>원</p>
+            <p>좋아요: <span class="like-count" th:text="${product.likeCount}">0</span></p>
+            
+            <!-- 사이즈 선택 - 재고가 있는 사이즈만 표시 -->
+            <div class="size-selector">
+                <label for="size">사이즈 선택:</label>
+                <select id="size" name="size">
+                    <option value="">선택해주세요</option>
+                    <option th:each="size : ${T(com.trendy.product.ProductOption.Size).values()}"
+                            th:value="${size.value}"
+                            th:text="${size.value}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- 수량 선택 -->
+            <div class="quantity-selector">
+                <label for="quantity">수량:</label>
+                <div class="quantity-controls">
+                    <button type="button" onclick="decreaseQuantity()">-</button>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" readonly>
+                    <button type="button" onclick="increaseQuantity()">+</button>
+                </div>
+            </div>
+
+            <!-- 배송 정보 섹션 추가 -->
+            <div class="delivery-info">
+                <h3>배송 방법 선택</h3>
+                
+                <!-- 배송 방법 선택 -->
+                <div class="delivery-method">
+                    <div class="radio-group">
+                        <input type="radio" id="delivery" name="deliveryType" value="delivery" checked>
+                        <label for="delivery">배송</label>
+                        
+                        <input type="radio" id="pickup" name="deliveryType" value="pickup">
+                        <label for="pickup">매장픽업</label>
+                    </div>
+                </div>
+
+                <!-- 배송지 입력 (배송 선택 시) -->
+                <div id="deliveryAddressSection" class="delivery-section">
+                    <div class="form-group">
+                        <label for="shippingAddress">배송지 주소:</label>
+                        <input type="text" id="shippingAddress" name="shippingAddress" placeholder="배송지를 입력해주세요">
+                    </div>
+                </div>
+
+                <!-- 픽업 장소 선택 (픽업 선택 시) -->
+                <div id="pickupLocationSection" class="delivery-section" style="display: none;">
+                    <div class="radio-group">
+                        <div class="pickup-option">
+                            <input type="radio" id="Jamsil" name="pickupLocation" value="Jamsil">
+                            <label for="Jamsil">잠실점</label>
+                        </div>
+                        <div class="pickup-option">
+                            <input type="radio" id="Mapo" name="pickupLocation" value="Mapo">
+                            <label for="Mapo">마포점</label>
+                        </div>
+                        <div class="pickup-option">
+                            <input type="radio" id="Gangnam" name="pickupLocation" value="Gangnam">
+                            <label for="Gangnam">강남점</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 버튼들 -->
+            <div class="action-buttons">
+                <button class="cart-button" th:onclick="handleCartClick([[${product.id}]], [[${userId != null}]])">
+                    장바구니 담기
+                </button>
+                <button class="purchase-button" th:onclick="handlePurchaseClick([[${product.id}]], [[${userId != null}]], [[${product.price}]])">
+                    구매하기
+                </button>
+                <button class="like-button" th:onclick="handleLikeClick([[${product.id}]], [[${userId != null}]], this)">
+                    좋아요
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${product}" class="error-message">
+        <p>상품을 찾을 수 없습니다.</p>
+    </div>
+
+    <script th:inline="javascript">
+        //수량 추가감소
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue < 10) {
+                quantityInput.value = currentValue + 1;
+            }
+        }
+        
+        function handleLikeClick(productId, isLoggedIn, button) {
+            if (!isLoggedIn) {
+                if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+                    window.location.href = '/login';
+                }
+                return;
+            }
+            toggleLike(button, productId);
+        }
+
+        function handleCartClick(productId, isLoggedIn) {
+            if (!isLoggedIn) {
+                if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+                    window.location.href = '/login';
+                }
+                return;
+            }
+
+            // 사이즈와 수량 가져오기
+            const size = document.getElementById('size').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+
+            // 유효성 검사
+            if (!size) {
+                alert('사이즈를 선택해주세요.');
+                return;
+            }
+
+            if (!quantity || quantity < 1) {
+                alert('수량을 선택해주세요.');
+                return;
+            }
+
+            addToCart(productId, size, quantity);
+        }
+
+        //좋아요 추가   
+        function toggleLike(button, productId) {
+            if (!productId) {
+                console.error('Product ID is undefined');
+                return;
+            }
+            
+            fetch(`/api/products/${productId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    throw new Error('unauthorized');
+                }
+                if (!response.ok) {
+                    throw new Error('network error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.liked) {
+                    button.classList.add('liked');
+                } else {
+                    button.classList.remove('liked');
+                }
+                const likeCountElement = document.querySelector('.like-count');
+                if (likeCountElement) {
+                    likeCountElement.textContent = data.likeCount;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if (error.message === 'unauthorized') {
+                    alert('로그인이 필요한 서비스입니다.');
+                } else {
+                    alert('좋아요 처리 중 오류가 발생했습니다.');
+                }
+            });
+        }
+
+
+        //장바구니 추가
+        function addToCart(productId, size, quantity) {
+            // 먼저 optionId를 조회
+            fetch(`/api/products/${productId}/option?size=${size}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('옵션 조회에 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.optionId) {
+                        throw new Error('상품 옵션을 찾을 수 없습니다.');
+                    }
+
+                    // 장바구니 추가 요청
+                    return fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            optionId: data.optionId,
+                            quantity: quantity
+                        }),
+                        credentials: 'same-origin'
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('장바구니 추가에 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('장바구니에 추가되었습니다.');
+                    } else {
+                        alert(data.message || '장바구니 추가에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                });
+        }
+
+        function handlePurchaseClick(productId, isLoggedIn, price) {
+            // 1. 로그인 상태 확인
+            if (!isLoggedIn) {
+                if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+                    window.location.href = '/login';
+                }
+                return;
+            }
+
+            // 2. 사이즈, 수량 유효성 검사
+            const size = document.getElementById('size').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+
+            if (!size) {
+                alert('사이즈를 선택해주세요.');
+                return;
+            }
+
+            if (!quantity || quantity < 1) {
+                alert('수량을 선택해주세요.');
+                return;
+            }
+
+            // 3. 배송 방법 확인
+            const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+            let shippingAddress = null;
+            let pickupLocation = null;
+
+            if (deliveryType === 'delivery') {
+                shippingAddress = document.getElementById('shippingAddress').value;
+                if (!shippingAddress) {
+                    alert('배송지를 입력해주세요.');
+                    return;
+                }
+            } else {
+                pickupLocation = document.querySelector('input[name="pickupLocation"]:checked')?.value;
+                if (!pickupLocation) {
+                    alert('픽업 장소를 선택해주세요.');
+                    return;
+                }
+            }
+
+            // 4. optionId 조회 후 주문 생성
+            fetch(`/api/products/${productId}/option?size=${size}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.optionId) {
+                        throw new Error('상품 옵션을 찾을 수 없습니다.');
+                    }
+
+                    const orderData = {
+                        productId: productId,
+                        optionId: data.optionId,
+                        quantity: quantity,
+                        price: price * quantity,
+                        shippingAddress: shippingAddress,
+                        pickupLocation: pickupLocation ? pickupLocation : null,
+                        status: 'in_progress'
+                    };
+
+                    return fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData),
+                        credentials: 'same-origin'
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.message || '주문 처리 중 오류가 발생했습니다.');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('주문이 생성되었습니다.');
+                        window.location.href = `/payment/${data.orderId}`;
+                    } else {
+                        alert(data.message || '주문 처리 중 오류가 발생했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message || '주문 처리 중 오류가 발생했습니다.');
+                });
+        }
+
+        // 배송 방법 변경 시 섹션 토글
+        document.querySelectorAll('input[name="deliveryType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const deliverySection = document.getElementById('deliveryAddressSection');
+                const pickupSection = document.getElementById('pickupLocationSection');
+                
+                if (this.value === 'delivery') {
+                    deliverySection.style.display = 'block';
+                    pickupSection.style.display = 'none';
+                } else {
+                    deliverySection.style.display = 'none';
+                    pickupSection.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

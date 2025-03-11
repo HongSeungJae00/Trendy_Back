@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: red;
+            font-style: italic;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        aside {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 15px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+        }
+
+        .address-section {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .address-section h2 {
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .add-address-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .address-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .address-item {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .address-item h4 {
+            margin: 0;
+            color: black;
+        }
+
+        .address-item p {
+            margin: 0;
+            color: gray;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .address-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .address-actions .default-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .address-actions .edit-btn,
+        .address-actions .delete-btn {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* 팝업 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 400px;
+        }
+
+        .popup input,
+        .popup button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .popup button {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .popup button.close-btn {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trendy</h1>
+        <nav>
+            <ul>
+				<li><a href="/login">로그인</a></li>
+				<li><a href="/mypage">마이페이지</a></li>
+				<li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+				<li><a href="/cart">장바구니</a></li>
+				<li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul>
+				<button class="register-btn" onclick="window.location.href='/product-registration'">판매 등록하기</button>
+				<li><a href="/myloginInformation">로그인 정보</a></li>
+				<li><a href="/myInformation">내정보</a></li>
+				<li><a href="/addressbook">주소록</a></li>
+				<li><a href="/sellAccount">판매 정산 계좌</a></li>
+				<li><a href="/cashReceipt">현금영수증 정보</a></li>
+            </ul>
+        </aside>
+		<section class="address-section">
+                    <h2>현금영수증 정보</h2>
+            <form id="cashReceiptForm">
+                <div>
+                    <label for="receiptType">형태</label>
+                    <select id="receiptType" name="receiptType">
+                        <option value="none">미신청</option>
+                        <option value="personal_deduction">개인 공제</option>
+                        <option value="business_deduction">사업자 공제</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="phoneNumber">전화번호</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="010-1234-5678">
+                </div>
+                <div>
+                    <input type="checkbox" id="agreement" name="agreement">
+                    <label for="agreement">현금영수증 신청 정보를 저장하는 것에 동의합니다.</label>
+                </div>
+                <button type="button" onclick="saveCashReceipt()">저장하기</button>
+            </form>
+            <div class="cash-receipt-list">
+                <h3>현재 저장된 현금영수증 정보</h3>
+                <div id="receiptList"></div>
+            </div>
+        </div>
+		</section>
+    <script>
+        function saveCashReceipt() {
+            const formData = {
+                receiptType: document.getElementById("receiptType").value,
+                phoneNumber: document.getElementById("phoneNumber").value,
+                agreement: document.getElementById("agreement").checked,
+            };
+
+            if (!formData.agreement) {
+                alert("동의가 필요합니다.");
+                return;
+            }
+
+            fetch('/api/cashReceipt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert("저장되었습니다.");
+                    loadReceipts(); // 새로 저장된 데이터를 불러옵니다.
+                })
+                .catch(error => console.error("오류 발생:", error));
+        }
+
+        function loadReceipts() {
+            fetch('/api/cashReceipt')
+                .then(response => response.json())
+                .then(data => {
+                    const listContainer = document.getElementById("receiptList");
+                    listContainer.innerHTML = ""; // 기존 데이터를 초기화합니다.
+
+                    data.forEach(item => {
+                        const div = document.createElement("div");
+                        div.className = "cash-receipt-item";
+                        div.innerHTML = `
+                            <p>형태: ${item.receiptType}</p>
+                            <p>전화번호: ${item.phoneNumber}</p>
+                            <p>저장 날짜: ${item.createdAt}</p>
+                        `;
+                        listContainer.appendChild(div);
+                    });
+                })
+                .catch(error => console.error("데이터 불러오기 오류:", error));
+        }
+
+        // 페이지 로드 시 현금영수증 정보 불러오기
+        document.addEventListener("DOMContentLoaded", loadReceipts);
+    </script>
+	</main>
+</body>
+</html>

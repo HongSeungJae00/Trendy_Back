@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modify Order</title>
+</head>
+<body>
+    <h1>Modify Order</h1>
+    <form th:action="@{/admin/order/modify}" th:object="${order}" method="post">
+        <input type="hidden" th:field="*{orderId}" />
+
+        <label for="userId">User ID:</label>
+        <input type="number" id="userId" th:field="*{userId}" required />
+        <br />
+
+        <label for="productId">Product ID:</label>
+        <input type="number" id="productId" th:field="*{productId}" required />
+        <br />
+
+        <label for="totalPrice">Total Price:</label>
+        <input type="number" id="totalPrice" th:field="*{totalPrice}" required />
+        <br />
+
+        <label for="status">Status:</label>
+        <select id="status" th:field="*{status}">
+            <option value="in_progress" th:selected="*{status == 'in_progress'}">In Progress</option>
+            <option value="shipping" th:selected="*{status == 'shipping'}">Shipping</option>
+            <option value="completed" th:selected="*{status == 'completed'}">Completed</option>
+        </select>
+        <br />
+
+        <button type="submit">Save Changes</button>
+    </form>
+	
+	<form th:action="@{/admin/order/delete}" method="post">
+	        <input type="hidden" name="orderId" th:value="${order.orderId}" />
+	        <button type="submit" style="color: red;">Delete</button>
+	</form>
+    <a href="/admin/order">Back to Orders</a>
+</body>
+</html>

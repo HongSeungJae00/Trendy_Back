@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이 페이지 - Trendy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+        aside {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-right: 1px solid #ddd;
+        }
+        aside button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        aside ul li {
+            margin: 10px 0;
+        }
+        main {
+            display: flex;
+        }
+        .mypage-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .address-list {
+            margin-top: 20px;
+        }
+        .address-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .address-actions button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: 1px solid red;
+            background-color: white;
+            color: red;
+            cursor: pointer;
+        }
+        .address-actions button.edit-btn {
+            background-color: red;
+            color: white;
+        }
+        .add-address-btn {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+		<h1>
+		  <a href="/main" style="color: red; font-style: italic; text-decoration: none;">Trendy</a>
+		</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+	<main>
+		       <nav>
+	           <ul>
+	               <li><a href="/login">로그인</a></li>
+	               <li><a href="/mypage">마이페이지</a></li>
+	               <li><a href="/event">이벤트/공지사항</a></li>
+	               <li><a href="/cart">장바구니</a></li>
+	               <li><a href="/board">고객센터</a></li>
+	           </ul>
+	       </nav>
+	   </header>
+
+	   <h1>저장된 이미지</h1>
+	      <img src="/images/event.jpg" alt="샘플 이미지">
+	</main>
+</body>
+</html>

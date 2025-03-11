@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>이메일 인증</title>
+</head>
+<body>
+    <h2>이메일 인증</h2>
+    
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    
+    <p th:if="${email}">
+        <span th:text="${email}"></span> 주소로 인증 메일이 발송되었습니다.<br>
+        이메일을 확인하여 인증을 완료해주세요.
+    </p>
+    
+    <form th:if="${email}" th:action="@{/signup/resend-verification}" method="post">
+        <input type="hidden" name="email" th:value="${email}" />
+        <button type="submit">인증 메일 재전송</button>
+    </form>
+    
+    <p>
+        <a href="/login">로그인 페이지로 이동</a>
+    </p>
+</body>
+</html>

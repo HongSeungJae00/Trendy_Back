@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매장 위치</title>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=m0thdgetno"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+        main {
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 50px); /* 화면 높이에 맞추어 조정 */
+        }
+        #map {
+            flex: 2;
+            height: 100%;
+        }
+        #store-info {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f8f8;
+            overflow-y: auto;
+        }
+        .store {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .store:hover {
+            background-color: #f1f1f1;
+        }
+        .store h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .store p {
+            margin: 5px 0;
+            color: #555;
+        }
+		aside {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-right: 1px solid #ddd;
+        }
+        aside button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        aside ul li {
+            margin: 10px 0;
+        }
+        aside ul li a {
+            text-decoration: none;
+            color: blue;
+        }
+        main {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/main" style="color: red; font-style: italic; text-decoration: none;">Trendy</a></h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+		<aside>
+		  <ul class="menu">
+		     <li><a href="/board?category=all">전체</a></li>
+		     <li><a href="/list">자주 묻는 질문</a></li>
+		     <li><a href="/board?category=location">매장위치 안내</a></li>
+		 </ul>
+		     <button class="chat-button">카카오톡 상담하기</button>
+		 </aside>	
+        <div id="map"></div>
+        <div id="store-info">
+            <div class="store" onclick="moveTo(37.512075, 127.099282)">
+                <h3>Trendy 롯데월드몰</h3>
+                <p>서울 송파구 올림픽로 300 롯데월드몰, 2F</p>
+                <p>영업시간: 10:30~22:00</p>
+            </div>
+            <div class="store" onclick="moveTo(37.526536, 126.925476)">
+                <h3>Trendy 더현대서울</h3>
+                <p>서울 영등포구 여의대로 108 더현대 서울 3층</p>
+                <p>영업시간: 10:30~22:00</p>
+            </div>
+            <div class="store" onclick="moveTo(37.504804, 127.00482)">
+                <h3>Trendy 신세계강남</h3>
+                <p>서울 서초구 신반포로 176</p>
+                <p>영업시간: 10:30~22:00</p>
+            </div>
+        </div>	
+    </main>
+    <script>
+        // 네이버 지도 초기화
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 시청 기준
+            zoom: 12
+        });
+
+        // 매장 위치 마커 추가
+        var markers = [
+            {
+                position: new naver.maps.LatLng(37.512075, 127.099282),
+                title: 'Trendy 롯데월드몰'
+            },
+            {
+                position: new naver.maps.LatLng(37.526536, 126.925476),
+                title: 'Trendy 더현대서울'
+            },
+            {
+                position: new naver.maps.LatLng(37.504804, 127.00482),
+                title: 'Trendy 신세계강남'
+            }
+        ];
+
+        // 지도에 마커 표시
+        markers.forEach(function (store) {
+            new naver.maps.Marker({
+                position: store.position,
+                map: map,
+                title: store.title
+            });
+        });
+
+        // 매장 선택 시 지도 이동
+        function moveTo(lat, lng) {
+            var location = new naver.maps.LatLng(lat, lng);
+            map.setCenter(location);
+            map.setZoom(15);
+        }
+    </script>
+</body>
+</html>

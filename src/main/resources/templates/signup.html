@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <script>
+		function checkUsername() {
+		    const username = document.getElementById('username').value;
+		    const result = document.getElementById('username-check-result');
+
+		    result.textContent = ""; // 이전 메시지 초기화
+
+		    if (!username) {
+		        result.textContent = "아이디를 입력해주세요.";
+		        result.style.color = "red";
+		        return;
+		    }
+
+		    fetch(`/check-username?username=${username}`)
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('네트워크 문제 발생');
+		            }
+		            return response.text();
+		        })
+		        .then(data => {
+		            if (data === "duplicate") {
+		                result.textContent = "이미 사용 중인 아이디입니다.";
+		                result.style.color = "red";
+		            } else {
+		                result.textContent = "사용 가능한 아이디입니다.";
+		                result.style.color = "green";
+		            }
+		        })
+		        .catch(error => {
+		            result.textContent = "서버와 통신 중 오류가 발생했습니다.";
+		            result.style.color = "red";
+		            console.error(error);
+		        });
+		}
+
+    </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+        let isUsernameChecked = false;
+        let isEmailVerified = false;
+
+        function checkUsername() {
+            const username = document.getElementById('username').value;
+            const result = document.getElementById('username-check-result');
+
+            result.textContent = "";
+
+            if (!username) {
+                result.textContent = "아이디를 입력해주세요.";
+                result.style.color = "red";
+                return;
+            }
+
+            fetch(`/check-username?username=${username}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 문제 발생');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    if (data === "duplicate") {
+                        result.textContent = "이미 사용 중인 아이디입니다.";
+                        result.style.color = "red";
+                        isUsernameChecked = false;
+                    } else {
+                        result.textContent = "사용 가능한 아이디입니다.";
+                        result.style.color = "green";
+                        isUsernameChecked = true;
+                        checkAllVerifications();
+                    }
+                })
+                .catch(error => {
+                    result.textContent = "서버와 통신 중 오류가 발생했습니다.";
+                    result.style.color = "red";
+                    console.error(error);
+                });
+        }
+
+        function sendNumber() {
+            $("#mail_number").css("display", "block");
+            var mail = $("#mail").val();
+            
+            if (!mail) {
+                alert("이메일을 입력해주세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "/mail",
+                type: "post",
+                dataType: "json",
+                data: { "mail": mail },
+                success: function (data) {
+                    if (data.success) {
+                        alert(data.message);
+                    } else {
+                        alert("인증번호 발송 실패: " + data.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("오류 발생: " + error);
+                }
+            });
+        }
+
+        function confirmNumber() {
+            var userNumber = $("#number").val();
+            var mail = $("#mail").val();
+            
+            if (!userNumber) {
+                alert("인증번호를 입력해주세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "/mailCheck",
+                type: "get",
+                data: { 
+                    "userNumber": userNumber,
+                    "mail": mail
+                },
+                success: function (data) {
+                    if (data) {
+                        alert("인증되었습니다.");
+                        isEmailVerified = true;
+                        $("#mail_number").css("display", "none");
+                        $("#sendBtn").prop("disabled", true);
+                        checkAllVerifications();
+                    } else {
+                        alert("인증번호가 일치하지 않습니다.");
+                        isEmailVerified = false;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("오류 발생: " + error);
+                }
+            });
+        }
+
+        function checkAllVerifications() {
+            if (isUsernameChecked && isEmailVerified) {
+                $("#signupBtn").css("display", "block");
+            }
+        }
+
+        // DOM이 완전히 로드된 후 이벤트 리스너 등록
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (!isUsernameChecked) {
+                        alert('아이디 중복 확인을 해주세요.');
+                        return;
+                    }
+                    
+                    if (!isEmailVerified) {
+                        alert('이메일 인증을 완료해주세요.');
+                        return;
+                    }
+
+                    console.log('Form submission started');
+                    this.submit();
+                });
+            }
+        });
+    </script>
+
+</head>
+<body>
+    <div class="signup-container">
+        <h1>회원가입</h1>
+        <form action="/signup" id="signupForm" method="post">
+            <div>
+                <input type="text" id="username" name="username" placeholder="아이디" required>
+                <button type="button" onclick="checkUsername()">중복 확인</button>
+            </div>
+            <p id="username-check-result" style="color: red;"></p>
+            
+            <div class="form-group">
+                <label for="mail">이메일</label>
+                <input type="email" id="mail" name="email" required>
+                <button type="button" id="sendBtn" onclick="sendNumber()">인증번호 발송</button>
+            </div>
+            <div id="mail_number" style="display: none">
+                <input type="text" id="number" placeholder="인증번호 입력">
+                <button type="button" id="confirmBtn" onclick="confirmNumber()">이메일 인증</button>
+            </div>
+
+            <div>
+                <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            </div>
+
+            <button type="submit" id="signupBtn" style="display: none;">회원가입</button>
+        </form>
+        <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+    </div>
+</body>
+</html>

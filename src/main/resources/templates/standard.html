@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: red;
+            font-style: italic;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        aside {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 15px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+        }
+
+        .qa-section {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .qa-section h2 {
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .qa-item {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .qa-item h4 {
+            margin: 0 0 10px;
+            color: black;
+        }
+
+        .qa-item p {
+            margin: 0;
+            color: gray;
+        }
+
+        .accordion {
+            background-color: #f8f8f8;
+            cursor: pointer;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .panel {
+            padding: 15px;
+            display: none;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .panel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .panel ul li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Trendy</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/mypage">마이페이지</a></li>
+                <li><a href="/CustomerCenter">이벤트/공지사항</a></li>
+                <li><a href="/cart">장바구니</a></li>
+                <li><a href="/board">고객센터</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <ul>
+                <li><a href="/notice">공지사항</a></li>
+                <li><a href="/QandA">자주묻는질문</a></li>
+                <li><a href="/standard">검수기준</a></li>
+            </ul>
+        </aside>
+		<section>
+		   <h1>검수 기준</h1>
+		   <p th:text="${standardText}"></p>
+		</section>
+		   </main>
+</body>
+</html>
